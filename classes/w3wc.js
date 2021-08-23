@@ -10,6 +10,8 @@ class W3WConverter {
     #records = [];
     #fileToConvert = '';
     #fileToWrite = '';
+    #w3wapikey = '';
+    #googleapikey = '';
 
     constructor(fileToConvert,fileToWrite) {
         this.#fileToConvert = fileToConvert;
