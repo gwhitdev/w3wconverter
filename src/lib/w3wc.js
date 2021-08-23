@@ -1,8 +1,8 @@
-const WebResponse = require('./webresponse');
-const W3WAddress = require('./w3waddress');
-const ReadCsvFile = require('./ReadCsvFile');
-const GoogleCoords = require('./googlecoords');
-const WriteNewCsvFile = require('./WriteNewCsvFile');
+const WebResponse = require('./web-response');
+const W3WAddress = require('./w3w-address');
+const ReadCsvFile = require('./read-csv-file');
+const GoogleCoords = require('./google-coords');
+const WriteNewCsvFile = require('./write-new-csv-file');
 
 class W3WConverter {
     #latLong = [];
@@ -10,25 +10,23 @@ class W3WConverter {
     #records = [];
     #fileToConvert = '';
     #fileToWrite = '';
-    #w3wapikey = '';
-    #googleapikey = '';
 
     constructor(config) {
         this.#fileToConvert = config['fileToConvert'];
         this.#fileToWrite = config['fileToWrite'];
     }
 
-    async getPostcodes() {
+    getPostcodes() {
         return new ReadCsvFile(this.#fileToConvert).readFile();
     };
 
-    async getLatLongCoords(postcode) {
+    getLatLongCoords(postcode) {
         const attempt = new GoogleCoords(postcode);
         return attempt.getLongLat();
     }
 
     getW3WAddress(lat,long) {
-        const w3w = new W3WAddress(lat,long,this.#w3wapikey);
+        const w3w = new W3WAddress(lat,long);
         return w3w.getAddress();
     }
 
@@ -49,6 +47,7 @@ class W3WConverter {
         for(let i = 0; i < postcodes.length; i++) {
             this.#latLong[i] = await this.getLatLongCoords(postcodes[i].postcode);
         }
+
         let temp = [];
         for(let i = 0; i < this.#latLong.length; i++) {
             temp = await (await this.getW3WAddress(this.#latLong[i].lat,this.#latLong[i].lng)).data.words;
@@ -58,7 +57,7 @@ class W3WConverter {
         this.#words.forEach((w,key) => {
             const lat = this.#latLong[key].lat;
             const lng = this.#latLong[key].lng;
-            console.log('lng: ', lng);
+            
             this.#records.push({
                 address_number: `${postcodes[key].address_number}`,
                 postcode: `${postcodes[key].postcode}`,

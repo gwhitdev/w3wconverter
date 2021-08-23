@@ -12,9 +12,7 @@ class ReadCsvFile {
         try {
             const data = fs.readFileSync(this.#fileToConvert,'utf8');
             console.log('Reading CSV data...');
-            console.log('data:', data);
             const tempArr = await neatCsv(data);
-            console.log('temparr:', tempArr);
             return tempArr;
 
           } catch (err) {
