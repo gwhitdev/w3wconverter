@@ -9,13 +9,10 @@ class W3WAddress {
     }
 
     async getAddress() {
-        //console.log('lat:', this.#lat);
-        //console.log('lng: ', this.#long);
-        //console.log('Getting W3W addresses...');
-        const res = await axios.get(`https://api.what3words.com/v3/convert-to-3wa?coordinates=${this.#lat}%2C${this.#long}&key=2JEQ9FTC`);
+        const res = await axios.get(`https://api.what3words.com/v3/convert-to-3wa?coordinates=${this.#lat}%2C${this.#long}
+            &key=${process.env.W3W_API_KEY}`);
         const data = res.data;
         console.log('Done getting W3W addresses');
-        //console.log('getAddress: ', res.data);
         return {
             data
         };

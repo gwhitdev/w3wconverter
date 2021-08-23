@@ -13,9 +13,9 @@ class W3WConverter {
     #w3wapikey = '';
     #googleapikey = '';
 
-    constructor(fileToConvert,fileToWrite) {
-        this.#fileToConvert = fileToConvert;
-        this.#fileToWrite = fileToWrite;
+    constructor(config) {
+        this.#fileToConvert = config['fileToConvert'];
+        this.#fileToWrite = config['fileToWrite'];
     }
 
     async getPostcodes() {
@@ -28,7 +28,7 @@ class W3WConverter {
     }
 
     getW3WAddress(lat,long) {
-        const w3w = new W3WAddress(lat,long);
+        const w3w = new W3WAddress(lat,long,this.#w3wapikey);
         return w3w.getAddress();
     }
 
@@ -49,7 +49,6 @@ class W3WConverter {
         for(let i = 0; i < postcodes.length; i++) {
             this.#latLong[i] = await this.getLatLongCoords(postcodes[i].postcode);
         }
-        //console.log('this.latLong: ', this.#latLong);
         let temp = [];
         for(let i = 0; i < this.#latLong.length; i++) {
             temp = await (await this.getW3WAddress(this.#latLong[i].lat,this.#latLong[i].lng)).data.words;

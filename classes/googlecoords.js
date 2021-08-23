@@ -12,9 +12,10 @@ class GoogleCoords {
     };
 
     async getCoords(postcode) {
+      const key = process.env.GOOGLE_API_KEY;
         try {
-            //let postcode = 'll29 6af';
-          return await axios.get(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${postcode}&inputtype=textquery&fields=geometry&key=AIzaSyDwtgi3X2LB_BYLZ_Ex8rqeAEeYdiT3hOc`);
+          
+          return await axios.get(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${postcode}&inputtype=textquery&fields=geometry&key=${key}`);
         } catch (error) {
           console.error(error)
         }
