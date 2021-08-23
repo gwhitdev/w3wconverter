@@ -7,15 +7,13 @@ class GoogleCoords {
         'lng':null
     };
     constructor(postcode) {
-        this.postcode = postcode;
-        
+        this.postcode = postcode;  
     };
 
     async getCoords(postcode) {
-      const key = process.env.GOOGLE_API_KEY;
         try {
-          
-          return await axios.get(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${postcode}&inputtype=textquery&fields=geometry&key=${key}`);
+          return await axios.get(`https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${postcode}&inputtype=textquery&fields=geometry
+                          &key=${process.env.GOOGLE_API_KEY}`);
         } catch (error) {
           console.error(error)
         }
