@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 require('dotenv').config();
 
-const W3WConvert = require('./classes/w3wc');
+const W3WConvert = require('./src/lib/w3wc');
 
 const PORT = 3000;
 
