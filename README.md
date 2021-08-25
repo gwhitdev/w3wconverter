@@ -5,3 +5,6 @@ these to What3Words via their API to output a CSV file containing What3Words add
 
 ## Config
 You will need to create a .env file and set the following variables with your own API keys: GOOGLE_API_KEY and W3W_API_KEY.
+
+## License
+GNU General Public License v3.0
