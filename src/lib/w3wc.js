@@ -1,8 +1,8 @@
-const WebResponse = require('./src/lib/web-response');
-const W3WAddress = require('./src/lib/w3w-address');
-const ReadCsvFile = require('./src/lib/read-csv-file');
-const GoogleCoords = require('./src/lib/google-coords');
-const WriteNewCsvFile = require('./src/lib/write-new-csv-file');
+const WebResponse = require('./web-response');
+const W3WAddress = require('./w3w-address');
+const ReadCsvFile = require('./read-csv-file');
+const GoogleCoords = require('./google-coords');
+const WriteNewCsvFile = require('./write-new-csv-file');
 
 class W3WConverter {
     #latLong = [];
