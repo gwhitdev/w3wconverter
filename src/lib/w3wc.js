@@ -20,6 +20,7 @@ const W3WAddress = require('./w3w-address');
 const ReadCsvFile = require('./read-csv-file');
 const GoogleCoords = require('./google-coords');
 const WriteNewCsvFile = require('./write-new-csv-file');
+const WebResponseV2 = require('./web-response-v2');
 
 class W3WConverter {
     #latLong = [];
@@ -57,9 +58,28 @@ class W3WConverter {
         return new WriteNewCsvFile(fileToWrite, records).write();
     }
 
+    countRows(postcodesArr) {
+        let numberOfRows = 0;
+        postcodesArr.forEach(e => {
+            numberOfRows++;
+        });
+        return numberOfRows;
+    }
+
+    webResponseV2(informationArr) {
+        const response = WebResponseV2;
+        response.numberOfRows = informationArr['rows'];
+        return response;
+    }
+
+
     async convertData() {
         console.log('Converting data...');
         const postcodes = await this.getPostcodes();
+        const numberOfRows = this.countRows(postcodes);
+        const informationArr = [];
+        informationArr['rows'] = numberOfRows;
+        const response = this.webResponseV2(informationArr);
 
         for(let i = 0; i < postcodes.length; i++) {
             this.#latLong[i] = await this.getLatLongCoords(postcodes[i].postcode);
@@ -84,7 +104,10 @@ class W3WConverter {
         })
 
         this.writeNewCsvFile();
-        return this.giveWebResponse();
+        //return this.giveWebResponse();
+
+
+        return response;
         
     }
 }
