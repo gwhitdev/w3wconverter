@@ -13,8 +13,3 @@ const response = w3w.webResponseV2(informationArr);
 test('returns response object with number of rows as 3', () => {
     expect(response).toStrictEqual({"numberOfRows":3});
 });
-
-test('returns response object with number of rows as 3', () => {
-    expect(response.numberOfRows).toBe(3);
-});
-
