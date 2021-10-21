@@ -16,6 +16,7 @@ const W3WConverter = require('w3wconverter');
 const config = [];
 config['fileToConvert'] = <path to file>;
 config['fileToWrite'] = <filename without extension>;
+config['postcode'] =  <supplied single postcode from JSON>;
 const w3wconverter = new W3WConverter(config);
 
 // Returns a Json type response that can be displayed in a webpage. Console also shows 'Done'
