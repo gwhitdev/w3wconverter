@@ -27,9 +27,9 @@ class WebResponse {
         
         this.#records.forEach((e,key) => {
             this.#resObject.push({
-                address_number: this.#records[key].address_number,
+                //address_number: this.#records[key].address_number,
                 postcode: this.#records[key].postcode,
-                coords: this.#records[key].coords,
+                //coords: this.#records[key].coords,
                 w3w: this.#records[key].w3w
             });
         });

@@ -28,13 +28,18 @@ class W3WConverter {
     #records = [];
     #fileToConvert = '';
     #fileToWrite = '';
+    #postcode = '';
 
     constructor(config) {
-        this.#fileToConvert = config['fileToConvert'];
-        this.#fileToWrite = config['fileToWrite'];
+        this.#fileToConvert = config['fileToConvert'] ? config['fileToConvert'] : '';
+        this.#fileToWrite = config['fileToWrite'] ? config['fileToWrite'] : '';
+        this.#postcode = config['postcode'] ? config['postcode'] : '';
     }
 
     getPostcodes() {
+        if(this.#postcode.length > 0) {
+            return [{'postcode': this.#postcode}];
+        }
         return new ReadCsvFile(this.#fileToConvert).readFile();
     };
 
@@ -76,38 +81,48 @@ class W3WConverter {
     async convertData() {
         console.log('Converting data...');
         const postcodes = await this.getPostcodes();
-        const numberOfRows = this.countRows(postcodes);
-        const informationArr = [];
-        informationArr['rows'] = numberOfRows;
-        const response = this.webResponseV2(informationArr);
-
+        let response = {};
+        if(postcodes.length > 1) {
+            const numberOfRows = this.countRows(postcodes);
+            const informationArr = [];
+            informationArr['rows'] = numberOfRows;
+            response = this.webResponseV2(informationArr);
+        }
+        console.log('postcodes:',postcodes);
         for(let i = 0; i < postcodes.length; i++) {
+
             this.#latLong[i] = await this.getLatLongCoords(postcodes[i].postcode);
+            console.log(this.#latLong[i]);
         }
 
         let temp = [];
         for(let i = 0; i < this.#latLong.length; i++) {
             temp = await (await this.getW3WAddress(this.#latLong[i].lat,this.#latLong[i].lng)).data.words;
+            console.log('temp:',temp);
             this.#words[i] = temp;
         }
+        if(postcodes.length > 1) {
+            this.#words.forEach((w,key) => {
+                const lat = this.#latLong[key].lat;
+                const lng = this.#latLong[key].lng;
 
-        this.#words.forEach((w,key) => {
-            const lat = this.#latLong[key].lat;
-            const lng = this.#latLong[key].lng;
-            
-            this.#records.push({
-                address_number: `${postcodes[key].address_number}`,
-                postcode: `${postcodes[key].postcode}`,
-                coords: `${lat},${lng}`,
-                w3w: `${w}`
-            });    
-        })
+                this.#records.push({
+                    address_number: `${postcodes[key].address_number}`,
+                    postcode: `${postcodes[key].postcode}`,
+                    coords: `${lat},${lng}`,
+                    w3w: `${w}`
+                });
+            })
 
-        this.writeNewCsvFile();
-        //return this.giveWebResponse();
+            this.writeNewCsvFile();
+            return response;
+        }
+        console.log(this.#words[0]);
+        return {
+            'w3waddress': this.#words[0]
+        };
 
 
-        return response;
         
     }
 }
